@@ -174,13 +174,19 @@ def extraer_monto(texto):
         if re.search(r"\d{10,}", linea):
             continue
         # Ignorar líneas con palabras clave de referencia
-        skip_refs = ["取引","番号","No","ＮＯ","ID","承認","処理","カード","CL","T7"]
+                skip_refs = ["取引","番号","No","ＮＯ","ID","承認","処理","カード","CL","T7","通番","レジ","貴No","登録","0000"]
         if any(s in linea for s in skip_refs):
+            continue
+                yens = re.findall(r"[¥￥]\s*(\d[\d,]+)", linea)
+        if yens:
+            for n in yens:
+                val = int(n.replace(",",""))
+                if 10 < val <= 500000 and val > mayor:
+                    mayor = val
             continue
         numeros = re.findall(r"\d[\d,]+", linea)
         for n in numeros:
             val = int(n.replace(",",""))
-            # Ignorar montos irreales (>500,000 o <10)
             if val > 500000 or val < 10:
                 continue
             if val > mayor:
