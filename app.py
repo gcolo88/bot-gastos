@@ -263,5 +263,9 @@ def webhook():
     msg.body("👋 Mandame la foto de un ticket para registrarlo en tu planilla.")
     return str(resp)
 
+@app.route("/", methods=["GET"])
+def health():
+    return "OK", 200
+
 if __name__ == "__main__":
     app.run(debug=False, port=5000)
